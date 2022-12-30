@@ -3,7 +3,9 @@ package dc.food_diary;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.nfc.Tag;
 import android.os.Bundle;
 import android.util.Log;
@@ -91,14 +93,17 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     }
                     if (!haveUser) {
                         db.collection("users").add(user)
-                                .addOnSuccessListener(documentReference -> Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId()))
+                                .addOnSuccessListener(documentReference ->
+                                {
+                                    Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                                    SharedPreferences sharedPref = LoginActivity.this.getApplicationContext().getSharedPreferences("dc.food_diary",Context.MODE_PRIVATE);
+                                    sharedPref.edit().putString(getString(R.string.user_document_id), documentReference.getId()).apply();
+                                })
                                 .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
                     }
                 }
             });
 
-            Log.d(TAG, account.getEmail());
-            Log.d(TAG, account.getDisplayName());
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);
         } else {
