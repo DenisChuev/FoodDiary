@@ -20,11 +20,16 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
 
@@ -32,6 +37,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private SignInButton signInButton;
     private GoogleSignInClient signInClient;
     private static final int RC_SIGN_IN = 1;
+    private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +53,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         signInButton = findViewById(R.id.sign_in_button);
         signInButton.setOnClickListener(this);
 
+        db = FirebaseFirestore.getInstance();
     }
 
     @Override
@@ -69,6 +76,27 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     private void openMainActivity(GoogleSignInAccount account) {
         if (account != null) {
+            UserProfile user = new UserProfile(account);
+
+            db.collection("users").get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    boolean haveUser = false;
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        Log.d("Firestore", document.getId());
+                        Log.d("Firestore", String.valueOf(document.getData()));
+                        if (String.valueOf(document.get("email")).equals(account.getEmail())) {
+                            haveUser = true;
+                            break;
+                        }
+                    }
+                    if (!haveUser) {
+                        db.collection("users").add(user)
+                                .addOnSuccessListener(documentReference -> Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId()))
+                                .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
+                    }
+                }
+            });
+
             Log.d(TAG, account.getEmail());
             Log.d(TAG, account.getDisplayName());
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);

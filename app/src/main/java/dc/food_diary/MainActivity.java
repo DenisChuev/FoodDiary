@@ -78,6 +78,10 @@ public class MainActivity extends AppCompatActivity {
             Auth.GoogleSignInApi.signOut(client.asGoogleApiClient()).setResultCallback(
                     status -> finish());
         }
+        if (item.getItemId() == R.id.action_account) {
+            Intent intent = new Intent(MainActivity.this, AccountActivity.class);
+            startActivity(intent);
+        }
         return true;
     }
 

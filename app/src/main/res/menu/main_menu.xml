@@ -3,9 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/action_account"
+        android:icon="@drawable/ic_account"
+        android:title="Profile"
+        app:showAsAction="always" />
+
+    <item
         android:id="@+id/action_logout"
         android:icon="@drawable/ic_logout"
         android:title="Logout"
         app:showAsAction="always" />
+
 
 </menu>
