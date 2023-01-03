@@ -39,9 +39,9 @@ public class FirestoreUtl {
                         user.setEmail(email);
                         user.setDisplayName(String.valueOf(document.get("displayName")));
                         user.setPhotoUrl(Uri.parse(String.valueOf(document.get("photoUrl"))));
-                        double height = (double) document.get("height");
+                        double growth = (double) document.get("growth");
                         double weight = (double) document.get("weight");
-                        user.setHeight(height);
+                        user.setGrowth(growth);
                         user.setWeight(weight);
                         break;
                     }

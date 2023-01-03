@@ -8,7 +8,7 @@ public class UserProfile {
     private String displayName;
     private String email;
     private Uri photoUrl;
-    private double height;
+    private double growth;
     private double weight;
     private double imt;
 
@@ -46,12 +46,12 @@ public class UserProfile {
         this.photoUrl = photoUrl;
     }
 
-    public double getHeight() {
-        return height;
+    public double setGrowth() {
+        return growth;
     }
 
-    public void setHeight(double height) {
-        this.height = height;
+    public void setGrowth(double growth) {
+        this.growth = growth;
     }
 
     public double getWeight() {

@@ -9,6 +9,8 @@ import android.widget.TextView;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import dc.food_diary.dao.Food;
+
 public class NewFoodActivity extends AppCompatActivity {
     FoodRepository repository;
 

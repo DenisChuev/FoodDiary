@@ -1,4 +1,4 @@
-package dc.food_diary;
+package dc.food_diary.dao;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;

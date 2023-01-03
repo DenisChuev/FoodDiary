@@ -3,13 +3,14 @@ package dc.food_diary;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
+
+import dc.food_diary.dao.Food;
 
 public class FoodListAdapter extends ListAdapter<Food, FoodListAdapter.FoodViewHolder> {
     public FoodListAdapter(@NonNull DiffUtil.ItemCallback<Food> diffCallback) {

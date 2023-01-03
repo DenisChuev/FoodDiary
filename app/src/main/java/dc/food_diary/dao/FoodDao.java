@@ -1,4 +1,4 @@
-package dc.food_diary;
+package dc.food_diary.dao;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;

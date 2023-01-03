@@ -88,6 +88,10 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                         Log.d("Firestore", String.valueOf(document.getData()));
                         if (String.valueOf(document.get("email")).equals(account.getEmail())) {
                             haveUser = true;
+
+                            SharedPreferences sharedPref = LoginActivity.this.getApplicationContext().getSharedPreferences("dc.food_diary", Context.MODE_PRIVATE);
+                            sharedPref.edit().putString(getString(R.string.user_document_id), document.getId()).apply();
+
                             break;
                         }
                     }
@@ -96,7 +100,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                                 .addOnSuccessListener(documentReference ->
                                 {
                                     Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                                    SharedPreferences sharedPref = LoginActivity.this.getApplicationContext().getSharedPreferences("dc.food_diary",Context.MODE_PRIVATE);
+                                    SharedPreferences sharedPref = LoginActivity.this.getApplicationContext().getSharedPreferences("dc.food_diary", Context.MODE_PRIVATE);
                                     sharedPref.edit().putString(getString(R.string.user_document_id), documentReference.getId()).apply();
                                 })
                                 .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
