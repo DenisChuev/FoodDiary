@@ -21,6 +21,9 @@ public class Food {
     @ColumnInfo(name = "food_text")
     private String foodText = "";
 
+    @ColumnInfo(name = "food_type")
+    private String foodType = "";
+
     public int getId() {
         return id;
     }
@@ -45,5 +48,13 @@ public class Food {
 
     public void setFoodText(String foodText) {
         this.foodText = foodText;
+    }
+
+    public String getFoodType() {
+        return foodType;
+    }
+
+    public void setFoodType(String foodType) {
+        this.foodType = foodType;
     }
 }
