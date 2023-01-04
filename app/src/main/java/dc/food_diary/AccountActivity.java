@@ -2,20 +2,25 @@ package dc.food_diary;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -47,6 +52,29 @@ public class AccountActivity extends AppCompatActivity {
         TextView accountWeightText = findViewById(R.id.account_weight_value);
         ImageView growthArrow = findViewById(R.id.arrow_growth);
         ImageView weightArrow = findViewById(R.id.arrow_weight);
+
+        Toolbar account_toolbar = findViewById(R.id.account_toolbar);
+        setSupportActionBar(account_toolbar);
+
+        Button exitButton = findViewById(R.id.exit_button);
+        exitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                        .requestEmail()
+                        .build();
+                GoogleSignInClient client = GoogleSignIn.getClient(AccountActivity.this, gso);
+
+                FirebaseAuth.getInstance().signOut();
+                Auth.GoogleSignInApi.signOut(client.asGoogleApiClient()).setResultCallback(
+                        status -> {
+                            finish();
+                            Intent intent = new Intent(AccountActivity.this, LoginActivity.class);
+                            startActivity(intent);
+                        });
+            }
+        });
+
 
         growthArrow.setOnClickListener(view -> new DialogGrowth().show(getSupportFragmentManager(), null));
         weightArrow.setOnClickListener(view -> new DialogWeight().show(getSupportFragmentManager(), null));

@@ -6,13 +6,28 @@
     android:layout_height="match_parent"
     tools:context=".AccountActivity">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/account_toolbar"
+        android:layout_width="0dp"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/Theme.FoodDiary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:title="@string/account_profile"
+        app:titleTextColor="@color/white" />
+
+
     <ImageView
         android:id="@+id/account_photo"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_margin="16dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/account_toolbar"
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
@@ -108,13 +123,25 @@
             android:id="@+id/arrow_weight"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            app:layout_constraintBottom_toBottomOf="parent"
             android:src="@drawable/ic_arrow_right"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/account_weight_value"
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <Button
+        android:id="@+id/exit_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:padding="16dp"
+        android:text="@string/account_exit"
+        android:theme="@style/Theme.FoodDiary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

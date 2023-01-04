@@ -13,4 +13,6 @@
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
     <string name="user_document_id">userDocumentId</string>
+    <string name="account_profile">Профиль</string>
+    <string name="account_exit">Выйти</string>
 </resources>
