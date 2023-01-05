@@ -72,16 +72,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_logout) {
-            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                    .requestEmail()
-                    .build();
-            GoogleSignInClient client = GoogleSignIn.getClient(this, gso);
-
-            FirebaseAuth.getInstance().signOut();
-            Auth.GoogleSignInApi.signOut(client.asGoogleApiClient()).setResultCallback(
-                    status -> finish());
-        }
         if (item.getItemId() == R.id.action_account) {
             Intent intent = new Intent(MainActivity.this, AccountActivity.class);
             startActivity(intent);

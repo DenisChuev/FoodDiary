@@ -33,7 +33,7 @@ public class FoodRepository {
         foodList = foodDao.getFoodList();
     }
 
-    LiveData<List<Food>> getFoodList() {
+    public LiveData<List<Food>> getFoodList() {
         return foodList;
     }
 
