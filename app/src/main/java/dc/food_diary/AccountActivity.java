@@ -19,8 +19,10 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -30,6 +32,8 @@ import dc.food_diary.dialog.DialogWeight;
 
 public class AccountActivity extends AppCompatActivity {
     private FirebaseFirestore db;
+    private FoodPreferences prefs;
+    private FoodRepository repository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +41,8 @@ public class AccountActivity extends AppCompatActivity {
         setContentView(R.layout.activity_account);
 
         db = FirebaseFirestore.getInstance();
-
+        prefs = new FoodPreferences(getApplication());
+        repository = new FoodRepository(getApplication());
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
@@ -50,8 +55,11 @@ public class AccountActivity extends AppCompatActivity {
         TextView accountEmail = findViewById(R.id.account_email);
         TextView accountGrowthText = findViewById(R.id.account_growth_value);
         TextView accountWeightText = findViewById(R.id.account_weight_value);
-        ImageView growthArrow = findViewById(R.id.arrow_growth);
-        ImageView weightArrow = findViewById(R.id.arrow_weight);
+        TextView imt = findViewById(R.id.account_imt_value);
+
+        View viewWeight = findViewById(R.id.account_weight);
+        View viewGrowth = findViewById(R.id.account_growth);
+        View viewImt = findViewById(R.id.account_imt);
 
         Toolbar account_toolbar = findViewById(R.id.account_toolbar);
         setSupportActionBar(account_toolbar);
@@ -76,37 +84,39 @@ public class AccountActivity extends AppCompatActivity {
         });
 
 
-        growthArrow.setOnClickListener(view -> new DialogGrowth().show(getSupportFragmentManager(), null));
-        weightArrow.setOnClickListener(view -> new DialogWeight().show(getSupportFragmentManager(), null));
+        viewGrowth.setOnClickListener(view -> new DialogGrowth().show(getSupportFragmentManager(), null));
+        viewWeight.setOnClickListener(view -> new DialogWeight().show(getSupportFragmentManager(), null));
 
-        db.collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        db.collection("users").document(prefs.getDocumentId()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        if (document.get("email").equals(account.getEmail())) {
-                            Glide.with(AccountActivity.this).load(document.get("photoUrl")).into(accountPhoto);
-                            accountName.setText((CharSequence) document.get("displayName"));
-                            accountEmail.setText((CharSequence) document.get("email"));
+            public void onSuccess(DocumentSnapshot document) {
+                Glide.with(AccountActivity.this).load(document.get("photoUrl")).into(accountPhoto);
+                accountName.setText((CharSequence) document.get("displayName"));
+                accountEmail.setText((CharSequence) document.get("email"));
 
-                            try {
-                                double growth = (double) document.get("growth");
-                                if (growth != 0.0) {
-                                    accountGrowthText.setText("" + growth);
-                                }
-
-                                double weight = (double) document.get("weight");
-                                if (weight != 0.0) {
-                                    accountWeightText.setText("" + weight);
-                                }
-
-                            } catch (Exception e) {
-                                Log.e("AccountActivity", e.getMessage(), e);
-                            }
-
-                        }
+                try {
+                    double growth = (double) document.get("growth");
+                    if (growth != 0.0) {
+                        accountGrowthText.setText("" + growth);
                     }
+
+                    double weight = (double) document.get("weight");
+                    if (weight != 0.0) {
+                        accountWeightText.setText("" + weight);
+                    }
+                    if (growth != 0.0 && weight != 0) {
+                        UserProfile user = new UserProfile();
+                        user.setWeight(weight);
+                        user.setGrowth(growth);
+                        String imtValue = user.getImt();
+                        imt.setText(String.valueOf(imtValue));
+                        repository.updateUserIMT(imtValue);
+                    }
+
+                } catch (Exception e) {
+                    Log.e("AccountActivity", e.getMessage(), e);
                 }
+
             }
         });
 

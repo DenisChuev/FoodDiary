@@ -4,13 +4,15 @@ import android.net.Uri;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 
+import java.text.DecimalFormat;
+
 public class UserProfile {
     private String displayName;
     private String email;
     private Uri photoUrl;
     private double growth;
     private double weight;
-    private double imt;
+    private static final DecimalFormat df = new DecimalFormat("0.00");
 
     public UserProfile(GoogleSignInAccount account) {
         displayName = account.getDisplayName();
@@ -62,11 +64,7 @@ public class UserProfile {
         this.weight = weight;
     }
 
-    public double getImt() {
-        return imt;
-    }
-
-    public void setImt(double weight, double height) {
-
+    public String getImt() {
+        return df.format(weight / (growth * growth) * 10000);
     }
 }

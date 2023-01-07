@@ -67,7 +67,7 @@ public class FoodJournalFragment extends Fragment {
                 });
 
         foodRepository = new FoodRepository(getActivity().getApplication());
-        foodRepository.getFoodList().observe(this, foodList -> {
+        foodRepository.getFoodList().observe(this.getActivity(), foodList -> {
             adapter.submitList(foodList);
         });
         return adapter;

@@ -76,6 +76,7 @@
             android:id="@+id/account_growth_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingEnd="@dimen/min_dim"
             app:layout_constraintStart_toEndOf="@id/account_growth_title"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="185" />
@@ -115,6 +116,7 @@
             android:id="@+id/account_weight_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingEnd="@dimen/min_dim"
             app:layout_constraintStart_toEndOf="@id/account_weight_title"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="105" />
@@ -127,6 +129,46 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/account_weight_value"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/account_imt"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/account_weight">
+
+        <TextView
+            android:id="@+id/account_imt_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="ИМТ"
+            app:layout_constraintEnd_toStartOf="@id/account_imt_value"
+            app:layout_constraintHorizontal_weight="0.7"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/account_imt_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingEnd="@dimen/min_dim"
+            app:layout_constraintStart_toEndOf="@id/account_imt_title"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="25" />
+
+        <ImageView
+            android:id="@+id/arrow_imt_info"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_info"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/account_imt_value"
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

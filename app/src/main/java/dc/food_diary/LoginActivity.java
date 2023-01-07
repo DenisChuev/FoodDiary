@@ -41,11 +41,14 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private GoogleSignInClient signInClient;
     private static final int RC_SIGN_IN = 1;
     private FirebaseFirestore db;
+    FoodPreferences prefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        prefs = new FoodPreferences(getApplication());
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -92,24 +95,19 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 if (task.isSuccessful()) {
                     boolean haveUser = false;
                     for (QueryDocumentSnapshot document : task.getResult()) {
-                        Log.d("Firestore", document.getId());
-                        Log.d("Firestore", String.valueOf(document.getData()));
                         if (String.valueOf(document.get("email")).equals(account.getEmail())) {
                             haveUser = true;
 
-                            SharedPreferences sharedPref = LoginActivity.this.getApplicationContext().getSharedPreferences("dc.food_diary", Context.MODE_PRIVATE);
-                            sharedPref.edit().putString(getString(R.string.user_document_id), document.getId()).apply();
-
+                            prefs.setDocumentId(document.getId());
                             break;
                         }
                     }
                     if (!haveUser) {
                         db.collection("users").add(user)
-                                .addOnSuccessListener(documentReference ->
+                                .addOnSuccessListener(document ->
                                 {
-                                    Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                                    SharedPreferences sharedPref = LoginActivity.this.getApplicationContext().getSharedPreferences("dc.food_diary", Context.MODE_PRIVATE);
-                                    sharedPref.edit().putString(getString(R.string.user_document_id), documentReference.getId()).apply();
+                                    Log.d(TAG, "User document added with ID: " + document.getId());
+                                    prefs.setDocumentId(document.getId());
                                 })
                                 .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
                     }

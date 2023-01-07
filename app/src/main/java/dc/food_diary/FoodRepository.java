@@ -8,7 +8,11 @@ import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Source;
 
 import java.util.List;
 
@@ -22,11 +26,11 @@ public class FoodRepository {
     private LiveData<List<Food>> foodList;
     private FoodDatabase foodDb;
     private FirebaseFirestore foodFirestoreDb;
-    private SharedPreferences sharedPref;
+    private FoodPreferences prefs;
+
 
     public FoodRepository(Application application) {
-        sharedPref = application.getApplicationContext().getSharedPreferences("dc.food_diary", Context.MODE_PRIVATE);
-
+        prefs = new FoodPreferences(application);
         foodFirestoreDb = FirebaseFirestore.getInstance();
         foodDb = FoodDatabase.getDatabase(application);
         foodDao = foodDb.foodDao();
@@ -41,7 +45,7 @@ public class FoodRepository {
         foodDb.databaseWriteExecutor.execute(() -> {
             foodDao.insert(food);
 
-            String documentId = sharedPref.getString("userDocumentId", "");
+            String documentId = prefs.getDocumentId();
             Log.d("FoodRepository", documentId);
             foodFirestoreDb.collection("users").document(documentId)
                     .collection("food").add(food)
@@ -56,14 +60,19 @@ public class FoodRepository {
         });
     }
 
-
     public void updateUserGrowth(double growth) {
-        String documentId = sharedPref.getString("userDocumentId", "");
+        String documentId = prefs.getDocumentId();
         foodFirestoreDb.collection("users").document(documentId).update("growth", growth);
     }
 
+
     public void updateUserGWeight(double weight) {
-        String documentId = sharedPref.getString("userDocumentId", "");
+        String documentId = prefs.getDocumentId();
         foodFirestoreDb.collection("users").document(documentId).update("weight", weight);
+    }
+
+    public void updateUserIMT(String imt) {
+        String documentId = prefs.getDocumentId();
+        foodFirestoreDb.collection("users").document(documentId).update("imt", imt);
     }
 }
