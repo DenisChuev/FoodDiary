@@ -1,18 +1,13 @@
 package dc.food_diary;
 
 import android.app.Application;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.text.Editable;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Source;
 
 import java.util.List;
 
@@ -27,7 +22,7 @@ public class FoodRepository {
     private FoodDatabase foodDb;
     private FirebaseFirestore foodFirestoreDb;
     private FoodPreferences prefs;
-
+    private MutableLiveData<UserProfile> user = new MutableLiveData<>();
 
     public FoodRepository(Application application) {
         prefs = new FoodPreferences(application);
@@ -41,13 +36,38 @@ public class FoodRepository {
         return foodList;
     }
 
+    public MutableLiveData<UserProfile> getUser() {
+        return user;
+    }
+
+    public void updateUser() {
+        UserProfile currentUser = new UserProfile();
+        getFirestoreUser().get().addOnSuccessListener(userInfo -> {
+            currentUser.setDisplayName(String.valueOf(userInfo.get("displayName")));
+            currentUser.setPhotoUrl(String.valueOf(userInfo.get("photoUrl")));
+            currentUser.setEmail(String.valueOf(userInfo.get("email")));
+            try {
+                currentUser.setGrowth((Double) userInfo.get("growth"));
+                currentUser.setWeight((Double) userInfo.get("weight"));
+                currentUser.setImt(String.valueOf(userInfo.get("imt")));
+
+            } catch (Exception e) {
+                Log.e("FoodRepository", e.getMessage(), e);
+            }
+            user.setValue(currentUser);
+        });
+    }
+
+    private DocumentReference getFirestoreUser() {
+        String documentId = prefs.getDocumentId();
+        Log.d("FoodRepository", documentId);
+        return foodFirestoreDb.collection("users").document(documentId);
+    }
+
     public void insert(Food food) {
         foodDb.databaseWriteExecutor.execute(() -> {
             foodDao.insert(food);
-
-            String documentId = prefs.getDocumentId();
-            Log.d("FoodRepository", documentId);
-            foodFirestoreDb.collection("users").document(documentId)
+            getFirestoreUser()
                     .collection("food").add(food)
                     .addOnSuccessListener(documentReference -> Log.d("FoodRepository", documentReference.getId()));
         });
@@ -61,18 +81,15 @@ public class FoodRepository {
     }
 
     public void updateUserGrowth(double growth) {
-        String documentId = prefs.getDocumentId();
-        foodFirestoreDb.collection("users").document(documentId).update("growth", growth);
+        getFirestoreUser().update("growth", growth);
     }
 
 
     public void updateUserGWeight(double weight) {
-        String documentId = prefs.getDocumentId();
-        foodFirestoreDb.collection("users").document(documentId).update("weight", weight);
+        getFirestoreUser().update("weight", weight);
     }
 
     public void updateUserIMT(String imt) {
-        String documentId = prefs.getDocumentId();
-        foodFirestoreDb.collection("users").document(documentId).update("imt", imt);
+        getFirestoreUser().update("imt", imt);
     }
 }

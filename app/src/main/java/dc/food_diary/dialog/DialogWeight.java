@@ -18,11 +18,15 @@ import dc.food_diary.R;
 
 public class DialogWeight extends BottomSheetDialogFragment {
     private FoodRepository repository;
+    private EditText weightInput;
 
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         repository = new FoodRepository(this.getActivity().getApplication());
+        repository.getUser().observe(this, userProfile -> {
+            weightInput.setText(String.valueOf(userProfile.getWeight()));
+        });
         return super.onCreateDialog(savedInstanceState);
     }
 
@@ -35,14 +39,13 @@ public class DialogWeight extends BottomSheetDialogFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        EditText weightInput = view.findViewById(R.id.weight_input);
+        weightInput = view.findViewById(R.id.weight_input);
         Button saveWeight = view.findViewById(R.id.save_weight_button);
-        saveWeight.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                repository.updateUserGWeight(Double.parseDouble(weightInput.getText().toString()));
-                DialogWeight.this.dismiss();
-            }
+
+        repository.updateUser();
+        saveWeight.setOnClickListener(view1 -> {
+            repository.updateUserGWeight(Double.parseDouble(weightInput.getText().toString()));
+            DialogWeight.this.dismiss();
         });
     }
 

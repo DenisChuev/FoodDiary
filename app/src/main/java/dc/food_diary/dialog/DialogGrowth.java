@@ -10,19 +10,26 @@ import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.Observer;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import dc.food_diary.FoodRepository;
 import dc.food_diary.R;
+import dc.food_diary.UserProfile;
 
 public class DialogGrowth extends BottomSheetDialogFragment {
     private FoodRepository repository;
+    private EditText growthInput;
+
 
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         repository = new FoodRepository(this.getActivity().getApplication());
+        repository.getUser().observe(this, userProfile -> {
+            growthInput.setText(String.valueOf(userProfile.getGrowth()));
+        });
         return super.onCreateDialog(savedInstanceState);
     }
 
@@ -35,14 +42,13 @@ public class DialogGrowth extends BottomSheetDialogFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        EditText growthInput = view.findViewById(R.id.growth_input);
+        growthInput = view.findViewById(R.id.growth_input);
         Button saveGrowth = view.findViewById(R.id.save_growth_button);
-        saveGrowth.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                repository.updateUserGrowth(Double.parseDouble(growthInput.getText().toString()));
-                DialogGrowth.this.dismiss();
-            }
+
+        repository.updateUser();
+        saveGrowth.setOnClickListener(v -> {
+            repository.updateUserGrowth(Double.parseDouble(growthInput.getText().toString()));
+            DialogGrowth.this.dismiss();
         });
     }
 }

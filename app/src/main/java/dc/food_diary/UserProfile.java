@@ -9,15 +9,16 @@ import java.text.DecimalFormat;
 public class UserProfile {
     private String displayName;
     private String email;
-    private Uri photoUrl;
+    private String photoUrl;
     private double growth;
     private double weight;
     private static final DecimalFormat df = new DecimalFormat("0.00");
+    private String imt;
 
     public UserProfile(GoogleSignInAccount account) {
         displayName = account.getDisplayName();
         email = account.getEmail();
-        photoUrl = account.getPhotoUrl();
+        photoUrl = String.valueOf(account.getPhotoUrl());
     }
 
     public UserProfile() {
@@ -40,15 +41,15 @@ public class UserProfile {
         this.email = email;
     }
 
-    public Uri getPhotoUrl() {
+    public String getPhotoUrl() {
         return photoUrl;
     }
 
-    public void setPhotoUrl(Uri photoUrl) {
+    public void setPhotoUrl(String photoUrl) {
         this.photoUrl = photoUrl;
     }
 
-    public double setGrowth() {
+    public double getGrowth() {
         return growth;
     }
 
@@ -66,5 +67,9 @@ public class UserProfile {
 
     public String getImt() {
         return df.format(weight / (growth * growth) * 10000);
+    }
+
+    public void setImt(String imt) {
+        this.imt = imt;
     }
 }
