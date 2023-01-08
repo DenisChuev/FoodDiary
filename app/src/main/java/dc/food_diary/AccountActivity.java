@@ -3,6 +3,7 @@ package dc.food_diary;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.Observer;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -31,8 +32,6 @@ import dc.food_diary.dialog.DialogGrowth;
 import dc.food_diary.dialog.DialogWeight;
 
 public class AccountActivity extends AppCompatActivity {
-    private FirebaseFirestore db;
-    private FoodPreferences prefs;
     private FoodRepository repository;
 
     @Override
@@ -40,15 +39,7 @@ public class AccountActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account);
 
-        db = FirebaseFirestore.getInstance();
-        prefs = new FoodPreferences(getApplication());
         repository = new FoodRepository(getApplication());
-
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
-        GoogleSignInClient client = GoogleSignIn.getClient(this, gso);
-        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
 
         ImageView accountPhoto = findViewById(R.id.account_photo);
         TextView accountName = findViewById(R.id.account_name);
@@ -65,58 +56,39 @@ public class AccountActivity extends AppCompatActivity {
         setSupportActionBar(account_toolbar);
 
         Button exitButton = findViewById(R.id.exit_button);
-        exitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                        .requestEmail()
-                        .build();
-                GoogleSignInClient client = GoogleSignIn.getClient(AccountActivity.this, gso);
+        exitButton.setOnClickListener(view -> {
+            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestEmail()
+                    .build();
+            GoogleSignInClient client = GoogleSignIn.getClient(AccountActivity.this, gso);
 
-                FirebaseAuth.getInstance().signOut();
-                Auth.GoogleSignInApi.signOut(client.asGoogleApiClient()).setResultCallback(
-                        status -> {
-                            finish();
-                            Intent intent = new Intent(AccountActivity.this, LoginActivity.class);
-                            startActivity(intent);
-                        });
-            }
+            FirebaseAuth.getInstance().signOut();
+            Auth.GoogleSignInApi.signOut(client.asGoogleApiClient()).setResultCallback(
+                    status -> {
+                        finish();
+                        Intent intent = new Intent(AccountActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                    });
         });
 
 
         viewGrowth.setOnClickListener(view -> new DialogGrowth().show(getSupportFragmentManager(), null));
         viewWeight.setOnClickListener(view -> new DialogWeight().show(getSupportFragmentManager(), null));
 
-        db.collection("users").document(prefs.getDocumentId()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot document) {
-                Glide.with(AccountActivity.this).load(document.get("photoUrl")).into(accountPhoto);
-                accountName.setText((CharSequence) document.get("displayName"));
-                accountEmail.setText((CharSequence) document.get("email"));
-
-                try {
-                    double growth = (double) document.get("growth");
-                    if (growth != 0.0) {
-                        accountGrowthText.setText("" + growth);
-                    }
-
-                    double weight = (double) document.get("weight");
-                    if (weight != 0.0) {
-                        accountWeightText.setText("" + weight);
-                    }
-                    if (growth != 0.0 && weight != 0) {
-                        UserProfile user = new UserProfile();
-                        user.setWeight(weight);
-                        user.setGrowth(growth);
-                        String imtValue = user.getImt();
-                        imt.setText(String.valueOf(imtValue));
-                        repository.updateUserIMT(imtValue);
-                    }
-
-                } catch (Exception e) {
-                    Log.e("AccountActivity", e.getMessage(), e);
-                }
-
+        repository.updateUser();
+        repository.getUser().observe(this, userProfile -> {
+            Glide.with(AccountActivity.this).load(userProfile.getPhotoUrl()).into(accountPhoto);
+            accountName.setText(userProfile.getDisplayName());
+            accountEmail.setText(userProfile.getEmail());
+            if (userProfile.getGrowth() != 0.0) {
+                accountGrowthText.setText("" + userProfile.getGrowth());
+            }
+            if (userProfile.getWeight() != 0.0) {
+                accountWeightText.setText("" + userProfile.getWeight());
+            }
+            if (userProfile.getGrowth() != 0.0 && userProfile.getWeight() != 0.0) {
+                imt.setText(userProfile.getImt());
+                repository.updateUserIMT(String.valueOf(imt.getText()));
             }
         });
 

@@ -6,6 +6,7 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -81,15 +82,15 @@ public class FoodRepository {
     }
 
     public void updateUserGrowth(double growth) {
-        getFirestoreUser().update("growth", growth);
+        getFirestoreUser().update("growth", growth).addOnSuccessListener(user -> updateUser());
     }
 
 
     public void updateUserGWeight(double weight) {
-        getFirestoreUser().update("weight", weight);
+        getFirestoreUser().update("weight", weight).addOnSuccessListener(user -> updateUser());
     }
 
     public void updateUserIMT(String imt) {
-        getFirestoreUser().update("imt", imt);
+        getFirestoreUser().update("imt", imt).addOnSuccessListener(user -> updateUser());
     }
 }
