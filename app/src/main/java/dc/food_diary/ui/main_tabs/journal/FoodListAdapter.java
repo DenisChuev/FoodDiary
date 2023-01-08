@@ -1,4 +1,4 @@
-package dc.food_diary;
+package dc.food_diary.ui.main_tabs.journal;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
+import dc.food_diary.R;
 import dc.food_diary.dao.Food;
 
 public class FoodListAdapter extends ListAdapter<Food, FoodListAdapter.FoodViewHolder> {

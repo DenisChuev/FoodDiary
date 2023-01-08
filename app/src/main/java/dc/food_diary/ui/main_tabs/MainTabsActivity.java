@@ -13,7 +13,6 @@ import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.tabs.TabLayout;
 
 import dc.food_diary.AccountActivity;
-import dc.food_diary.MainActivity;
 import dc.food_diary.R;
 
 public class MainTabsActivity extends AppCompatActivity {

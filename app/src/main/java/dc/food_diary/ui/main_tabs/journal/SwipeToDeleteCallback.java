@@ -1,4 +1,4 @@
-package dc.food_diary;
+package dc.food_diary.ui.main_tabs.journal;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -14,6 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
+
+import dc.food_diary.R;
 
 abstract public class SwipeToDeleteCallback extends ItemTouchHelper.Callback {
 
