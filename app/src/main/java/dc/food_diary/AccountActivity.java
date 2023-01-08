@@ -33,6 +33,7 @@ import dc.food_diary.dialog.DialogWeight;
 
 public class AccountActivity extends AppCompatActivity {
     private FoodRepository repository;
+    private FoodPreferences foodPrefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +41,7 @@ public class AccountActivity extends AppCompatActivity {
         setContentView(R.layout.activity_account);
 
         repository = new FoodRepository(getApplication());
+        foodPrefs = new FoodPreferences(getApplication());
 
         ImageView accountPhoto = findViewById(R.id.account_photo);
         TextView accountName = findViewById(R.id.account_name);
@@ -81,10 +83,10 @@ public class AccountActivity extends AppCompatActivity {
             accountName.setText(userProfile.getDisplayName());
             accountEmail.setText(userProfile.getEmail());
             if (userProfile.getGrowth() != 0.0) {
-                accountGrowthText.setText("" + userProfile.getGrowth());
+                accountGrowthText.setText(String.valueOf(userProfile.getGrowth()));
             }
             if (userProfile.getWeight() != 0.0) {
-                accountWeightText.setText("" + userProfile.getWeight());
+                accountWeightText.setText(String.valueOf(userProfile.getWeight()));
             }
             if (userProfile.getGrowth() != 0.0 && userProfile.getWeight() != 0.0) {
                 imt.setText(userProfile.getImt());

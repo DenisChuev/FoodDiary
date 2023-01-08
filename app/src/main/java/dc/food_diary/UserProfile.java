@@ -13,7 +13,7 @@ public class UserProfile {
     private double growth;
     private double weight;
     private static final DecimalFormat df = new DecimalFormat("0.00");
-    private String imt;
+    private String imt = "";
 
     public UserProfile(GoogleSignInAccount account) {
         displayName = account.getDisplayName();

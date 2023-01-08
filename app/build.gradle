@@ -5,12 +5,12 @@ plugins {
 
 android {
     namespace 'dc.food_diary'
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "dc.food_diary"
         minSdk 23
-        targetSdk 32
+        targetSdk 33
         versionCode 1
         versionName "1.0"
 
@@ -51,6 +51,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-firestore:24.4.1'
     implementation 'com.github.bumptech.glide:glide:4.14.2'
     implementation 'org.jsoup:jsoup:1.15.3'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.14.2'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.work:work-runtime:2.7.1'
     implementation 'io.reactivex.rxjava3:rxjava:3.1.5'
