@@ -35,25 +35,8 @@ public class RecipeRepository {
         Observable.fromCallable(() -> getRecipes(1))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<List<Recipe>>() {
-                    @Override
-                    public void onSubscribe(@NonNull Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onNext(@NonNull List<Recipe> recipesList) {
-                        recipes.setValue(recipesList);
-                    }
-
-                    @Override
-                    public void onError(@NonNull Throwable e) {
-                        Log.d(TAG, e.getMessage(), e);
-                    }
-
-                    @Override
-                    public void onComplete() {
-                    }
+                .subscribe((result) -> {
+                    recipes.setValue(result);
                 });
     }
 
