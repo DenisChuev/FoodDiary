@@ -3,6 +3,7 @@ package dc.food_diary.ui.main_tabs.recipe;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import androidx.annotation.MainThread;
 import androidx.lifecycle.MutableLiveData;
 
 import org.jsoup.Jsoup;
@@ -13,35 +14,47 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
+
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.annotations.NonNull;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.Observer;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class RecipeRepository {
     public static final String TAG = "RecipeRepository";
     private MutableLiveData<List<Recipe>> recipes = new MutableLiveData<>();
-
-
-    class RecipesTask extends AsyncTask<Void, Void, List<Recipe>> {
-
-        protected List<Recipe> doInBackground(Void... arg0) {
-            List<Recipe> recipes = new ArrayList<>();
-            try {
-                recipes = getRecipes(1);
-            } catch (IOException e) {
-                Log.e(TAG, e.getMessage(), e);
-            }
-            return recipes;
-        }
-
-        protected void onPostExecute(List<Recipe> result) {
-            recipes.setValue(result);
-        }
-    }
 
     public MutableLiveData<List<Recipe>> getRecipes() {
         return recipes;
     }
 
     public void updateRecipes() {
-        new RecipesTask().execute();
+        Observable.fromCallable(() -> getRecipes(1))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<List<Recipe>>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(@NonNull List<Recipe> recipesList) {
+                        recipes.setValue(recipesList);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        Log.d(TAG, e.getMessage(), e);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                    }
+                });
     }
 
     private List<Recipe> getRecipes(int page) throws IOException {
