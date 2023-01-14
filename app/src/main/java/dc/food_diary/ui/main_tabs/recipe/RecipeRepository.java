@@ -1,9 +1,7 @@
 package dc.food_diary.ui.main_tabs.recipe;
 
-import android.os.AsyncTask;
 import android.util.Log;
 
-import androidx.annotation.MainThread;
 import androidx.lifecycle.MutableLiveData;
 
 import org.jsoup.Jsoup;
@@ -14,13 +12,9 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Callable;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Observable;
-import io.reactivex.rxjava3.core.Observer;
-import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class RecipeRepository {
