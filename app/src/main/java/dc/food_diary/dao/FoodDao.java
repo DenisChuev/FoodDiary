@@ -10,7 +10,7 @@ import java.util.List;
 
 @Dao
 public interface FoodDao {
-    @Query("SELECT * FROM food ORDER BY food_date ASC")
+    @Query("SELECT * FROM food ORDER BY food_date Desc")
     LiveData<List<Food>> getFoodList();
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)

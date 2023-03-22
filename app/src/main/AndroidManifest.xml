@@ -25,7 +25,14 @@
         <activity
             android:name=".ui.main_tabs.MainTabsActivity"
             android:exported="true"
-            android:theme="@style/Theme.FoodDiary.NoActionBar" />
+            android:theme="@style/Theme.FoodDiary.NoActionBar">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".AccountActivity"
             android:exported="false"
@@ -33,13 +40,7 @@
         <activity
             android:name=".LoginActivity"
             android:exported="true"
-            android:theme="@style/Theme.FoodDiary.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:theme="@style/Theme.FoodDiary.NoActionBar"></activity>
         <activity
             android:name=".NewFoodActivity"
             android:exported="false" />

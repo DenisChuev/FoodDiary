@@ -63,9 +63,9 @@ public class FoodRepository {
     public void insert(Food food) {
         foodDb.databaseWriteExecutor.execute(() -> {
             foodDao.insert(food);
-            getFirestoreUser()
-                    .collection("food").add(food)
-                    .addOnSuccessListener(documentReference -> Log.d("FoodRepository", documentReference.getId()));
+            //getFirestoreUser()
+//                    .collection("food").add(food)
+//                    .addOnSuccessListener(documentReference -> Log.d("FoodRepository", documentReference.getId()));
         });
 
     }
