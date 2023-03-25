@@ -20,6 +20,8 @@ import android.view.ViewGroup;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.Collections;
+
 import dc.food_diary.FoodRepository;
 import dc.food_diary.NewFoodActivity;
 import dc.food_diary.R;
@@ -97,6 +99,7 @@ public class FoodJournalFragment extends Fragment {
 
         foodRepository = new FoodRepository(getActivity().getApplication());
         foodRepository.getFoodList().observe(this.getActivity(), foodList -> {
+            Collections.reverse(foodList);
             adapter.submitList(foodList);
         });
         return adapter;

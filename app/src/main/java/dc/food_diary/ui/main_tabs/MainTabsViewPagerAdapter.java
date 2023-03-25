@@ -18,9 +18,9 @@ public class MainTabsViewPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         if (position == 0) {
-            return new RecipeFragment();
-        } else {
             return new FoodJournalFragment();
+        } else {
+            return new RecipeFragment();
         }
     }
 
@@ -33,9 +33,9 @@ public class MainTabsViewPagerAdapter extends FragmentPagerAdapter {
     @Override
     public CharSequence getPageTitle(int position) {
         if (position == 0) {
-            return "Рецепты";
-        } else {
             return "Журнал";
+        } else {
+            return "Рецепты";
         }
     }
 }
