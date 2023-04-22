@@ -7,7 +7,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 import dc.food_diary.ui.main_tabs.journal.FoodJournalFragment;
-import dc.food_diary.ui.main_tabs.recipe.RecipeFragment;
 
 public class MainTabsViewPagerAdapter extends FragmentPagerAdapter {
     public MainTabsViewPagerAdapter(@NonNull FragmentManager fm) {
@@ -17,25 +16,17 @@ public class MainTabsViewPagerAdapter extends FragmentPagerAdapter {
     @NonNull
     @Override
     public Fragment getItem(int position) {
-        if (position == 0) {
-            return new FoodJournalFragment();
-        } else {
-            return new RecipeFragment();
-        }
+        return new FoodJournalFragment();
     }
 
     @Override
     public int getCount() {
-        return 2;
+        return 1;
     }
 
     @Nullable
     @Override
     public CharSequence getPageTitle(int position) {
-        if (position == 0) {
-            return "Журнал";
-        } else {
-            return "Рецепты";
-        }
+        return "Журнал";
     }
 }
