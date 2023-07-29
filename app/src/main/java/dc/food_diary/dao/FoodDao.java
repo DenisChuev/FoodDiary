@@ -21,4 +21,7 @@ public interface FoodDao {
 
     @Query("DELETE from food where id = :foodId")
     void deleteFood(int foodId);
+
+    @Query("SELECT food_text from food")
+    LiveData<List<String>> getFood();
 }

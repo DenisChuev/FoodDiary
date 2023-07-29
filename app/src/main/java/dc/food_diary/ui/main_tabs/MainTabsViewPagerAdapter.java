@@ -10,23 +10,32 @@ import dc.food_diary.ui.main_tabs.journal.FoodJournalFragment;
 
 public class MainTabsViewPagerAdapter extends FragmentPagerAdapter {
     public MainTabsViewPagerAdapter(@NonNull FragmentManager fm) {
-        super(fm);
+        super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
     }
 
     @NonNull
     @Override
     public Fragment getItem(int position) {
-        return new FoodJournalFragment();
+        if (position == 0) {
+            return new FoodJournalFragment();
+        }
+        else {
+            return new StatsFragment();
+        }
     }
 
     @Override
     public int getCount() {
-        return 1;
+        return 2;
     }
 
     @Nullable
     @Override
     public CharSequence getPageTitle(int position) {
-        return "Журнал";
+        if (position == 0) {
+            return "Журнал";
+        } else {
+            return "Статистика";
+        }
     }
 }
