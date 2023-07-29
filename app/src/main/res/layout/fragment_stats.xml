@@ -6,7 +6,31 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/stats_tv"
+        android:id="@+id/stats_avg_meal_time_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="8dp"
+        android:text="@string/stats_avg_meal_time"
+        android:textSize="18sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/stats_avg_meal_time"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:padding="8dp"
+        android:textSize="16sp"
+        app:layout_constraintHeight_percent="0.3"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/stats_avg_meal_time_tv" />
+
+    <TextView
+        android:id="@+id/stats_top_products_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -15,15 +39,16 @@
         android:textSize="18sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/stats_avg_meal_time" />
 
     <com.anychart.AnyChartView
         android:id="@+id/stats_top_products"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/stats_tv" />
+        app:layout_constraintTop_toBottomOf="@id/stats_top_products_tv" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

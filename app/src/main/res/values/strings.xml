@@ -16,6 +16,7 @@
     <string name="account_profile">Профиль</string>
     <string name="account_exit">Выйти</string>
     <string name="stats_top_products">Топ продуктов</string>
+    <string name="stats_avg_meal_time">Среднее время приёма пищи:</string>
 
     <string-array name="food_types">
         <item>Завтрак</item>

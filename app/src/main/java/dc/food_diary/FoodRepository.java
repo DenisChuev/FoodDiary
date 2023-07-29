@@ -1,9 +1,5 @@
 package dc.food_diary;
 
-import static java.util.Map.Entry.comparingByValue;
-import static java.util.stream.Collectors.toMap;
-
-import android.annotation.SuppressLint;
 import android.app.Application;
 import android.util.Log;
 
@@ -13,10 +9,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.LinkedHashMap;
 
 import dc.food_diary.dao.Food;
 import dc.food_diary.dao.FoodDao;
